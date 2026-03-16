@@ -1,0 +1,38 @@
+services:
+  nginx:
+    container_name: nginx
+    networks:
+      - inception
+
+  mariadb:
+    container_name: mariadb
+    networks:
+      - inception
+
+  wordpress:
+    container_name: wordpress
+    networks:
+      - inception
+
+
+volumes:
+    wordpress:
+        name: wordpress
+        driver: local
+        driver_opts: /home/sfelici/data/wordpress
+#            device:
+#            o:
+            type: none
+    mariadb:
+        name: mariadb
+        driver: local
+        driver_opts: /home/sfelici/data/mariadb
+#            device:
+#            o:
+            type: none
+
+
+networks:
+    inception:
+        name: inception
+        driver: bridge
