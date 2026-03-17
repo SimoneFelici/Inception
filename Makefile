@@ -1,22 +1,22 @@
 .PHONY: up down restart logs build ps
 
 up:
-	docker compose up -d
+	docker compose -f srcs/docker-compose.yml up -d
 
 down:
-	docker compose down
+	docker compose -f srcs/docker-compose.yml down
 
 restart:
-	docker compose restart
+	docker compose -f srcs/docker-compose.yml restart
 
 build:
-	docker compose up -d --build
+	docker compose -f srcs/docker-compose.yml up -d --build
 
 logs:
-	docker compose logs -f
+	docker compose -f srcs/docker-compose.yml logs -f
 
 ps:
-	docker compose ps
+	docker compose -f srcs/docker-compose.yml ps
 
 shell:
-	docker compose exec app sh
+	docker compose -f srcs/docker-compose.yml exec app sh
