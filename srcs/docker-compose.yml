@@ -1,38 +1,72 @@
 services:
-  nginx:
-    container_name: nginx
-    networks:
-      - inception
-
   mariadb:
     container_name: mariadb
+    image: mariadb
+    build: ./requirements/mariadb
+    restart: always
+    env_file: .env
     networks:
-      - inception
+      - inception_network
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    secrets:
+      - db_password
+      - db_root_password
 
   wordpress:
     container_name: wordpress
+    image: wordpress
+    build: ./requirements/wordpress
+    restart: always
+    env_file: .env
+    depends_on:
+      - mariadb
     networks:
-      - inception
+      - inception_network
+    volumes:
+      - wordpress_data:/var/www/html
+    secrets:
+      - credentials
+      - db_password
 
-
-volumes:
-    wordpress:
-        name: wordpress
-        driver: local
-        driver_opts: /home/sfelici/data/wordpress
-#            device:
-#            o:
-            type: none
-    mariadb:
-        name: mariadb
-        driver: local
-        driver_opts: /home/sfelici/data/mariadb
-#            device:
-#            o:
-            type: none
-
+  nginx:
+    container_name: nginx
+    image: nginx
+    build: ./requirements/nginx
+    restart: always
+    env_file: .env
+    depends_on:
+      - wordpress
+    ports:
+      - "443:443"
+    networks:
+      - inception_network
+    volumes:
+      - wordpress_data:/var/www/html
 
 networks:
-    inception:
-        name: inception
-        driver: bridge
+  inception_network:
+    driver: bridge
+    name: inception_network
+
+volumes:
+  mariadb_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/${LOGIN}/data/mariadb
+  wordpress_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/${LOGIN}/data/wordpress
+
+secrets:
+  db_password:
+    file: ../secrets/db_password.txt
+  db_root_password:
+    file: ../secrets/db_root_password.txt
+  credentials:
+    file: ../secrets/credentials.txt
