@@ -2,6 +2,10 @@ FROM debian:oldstable
 
 COPY
 
-RUN
+RUN apt-get update -y && apt-get install -y mariadb-server
 
-ENTRYPOINT
+COPY conf/50-server.cnf /etc/mysql/mariadb.conf.d/
+
+COPY tools/entrypoint.sh /usr/local/bin/
+
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
