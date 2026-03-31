@@ -1,6 +1,11 @@
 #!/bin/bash
 set -e
 
+if [ ! -f /run/secrets/db_password ] || [ ! -f /run/secrets/credentials ]; then
+    echo "Error: secrets not found"
+    exit 1
+fi
+
 DB_PASSWORD=$(cat /run/secrets/db_password)
 WP_ADMIN_PASSWORD=$(cat /run/secrets/credentials)
 
@@ -19,7 +24,7 @@ if [ ! -f wp-config.php ]; then
 
     echo "Installing WordPress..."
     wp core install --allow-root \
-        --url="${DOMAIN_NAME}" \
+        --url="https://${DOMAIN_NAME}" \
         --title="Inception" \
         --admin_user="${WP_ADMIN_USER}" \
         --admin_password="${WP_ADMIN_PASSWORD}" \
@@ -30,6 +35,10 @@ if [ ! -f wp-config.php ]; then
         --role=author \
         --user_pass="${DB_PASSWORD}" \
         --allow-root
+
+    chown -R www-data:www-data /var/www/html
+
+    echo "WordPress install completed"
 fi
 
 exec php-fpm8.2 -F

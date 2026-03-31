@@ -4,7 +4,8 @@ RUN apt-get update -y && apt-get install -y \
     php php-fpm php-mysql php-curl php-gd php-mbstring php-xml php-zip \
     curl \
     && rm -rf /var/lib/apt/lists/* \
-    && mkdir -p /run/php
+    && mkdir -p /run/php \
+    && chown -R www-data:www-data /var/www/html
 
 # Install WP-CLI
 RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
