@@ -1,2 +1,7 @@
-FROM alpine:3.22.3
+FROM debian:oldstable
 
+COPY
+
+RUN
+
+ENTRYPOINT
