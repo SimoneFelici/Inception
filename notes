@@ -1,0 +1,2 @@
+wp option update siteurl 'https://nuovourl.com'
+wp option update home 'https://nuovourl.com'
