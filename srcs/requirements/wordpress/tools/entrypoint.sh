@@ -13,7 +13,7 @@ cd /var/www/html
 
 if [ ! -f wp-config.php ]; then
     echo "Downloading WordPress..."
-    wp core download --allow-root
+    wp core download --allow-root --force
 
     echo "Configuring WordPress..."
     wp config create --allow-root \

@@ -4,9 +4,8 @@ set -e
 DB_PASSWORD=$(cat /run/secrets/db_password)
 DB_ROOT_PASSWORD=$(cat /run/secrets/db_root_password)
 
-if [ ! -d "/var/lib/mysql/mysql" ]; then
+if [ ! -d "/var/lib/mysql/wordpress" ]; then
     echo "Initializing MariaDB data directory..."
-    mariadb-install-db --user=mysql --datadir=/var/lib/mysql
 
     # Start temporarily to run setup queries
     mariadbd --user=mysql --datadir=/var/lib/mysql --skip-networking &
